@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-04 05:12:00
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 05:17:07
+ * @Last Modified time: 2018-04-04 08:16:21
  */
 
 /* ––
@@ -14,6 +14,8 @@
 /* ––
  * –––– Words
  * –––––––––––––––––––––––––––––––––– */
+
+export const availableLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export const wordDictionary = [
   { letters: [

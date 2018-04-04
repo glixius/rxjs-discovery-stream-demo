@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-03 21:53:33
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 12:49:28
+ * @Last Modified time: 2018-04-04 13:31:40
  */
 
 /* ––––––––––––––––– GENERAL ––––––––––––––––– */
@@ -122,5 +122,9 @@ aside {
   p {
     font-size: 120px;
     line-height: .8;
+
+    &.limited-time {
+      color: #B5001A;
+    }
   }
 }

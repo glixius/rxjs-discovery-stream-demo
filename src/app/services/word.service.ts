@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-04 05:02:23
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 05:42:29
+ * @Last Modified time: 2018-04-04 08:17:35
  */
 
 /* ––
@@ -14,7 +14,7 @@ import { Injectable } from '@angular/core';
 
 // App imports
 import { Word } from '../interfaces/word.interface';
-import { wordDictionary } from '../app.constants';
+import { wordDictionary, availableLetters } from '../app.constants';
 
 /* ––
  * –––– Service definition
@@ -49,7 +49,10 @@ export class WordService {
     } else {
       return null;
     }
+  }
 
+  isValidLetter(letter: string) {
+    return availableLetters.includes(letter);
   }
 
   /** –––

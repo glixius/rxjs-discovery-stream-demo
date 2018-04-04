@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-03 21:50:47
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 12:48:54
+ * @Last Modified time: 2018-04-04 13:22:47
  */
 
  /* ––
@@ -14,9 +14,13 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 // Third party libraries
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { interval } from 'rxjs/observable/interval';
+import { map, filter, scan, mapTo, share, take, skip, takeLast, distinct, takeUntil } from 'rxjs/operators';
 
 // App Imports
 import { LetterState } from './enums/letter-state.enum';
+import { Letter } from './interfaces/letter.interface';
 import { Word } from './interfaces/word.interface';
 import { WordService } from './services/word.service';
 
@@ -54,13 +58,87 @@ export class AppComponent implements OnInit, OnDestroy {
     this.usedLetters = [];
     this.currentSeconds = 0;
 
-    this.document.addEventListener('keypress', (event: KeyboardEvent) => this.usedLetters.push(event.key));
-    this.intervalId = setInterval(() => this.currentSeconds++, 1000)
+    const minuteSeconds$ = interval(1000)
+      .pipe(
+        take(61)
+      );
+    const minuteReached$ = minuteSeconds$
+      .pipe(takeLast(1));
+
+    // Create an Observable from keypress event.
+    const uniqueLetters$ = fromEvent(this.document, 'keypress')
+      .pipe(
+        takeUntil(minuteReached$),
+        map( (keyboardEvent: KeyboardEvent) => keyboardEvent.key.toUpperCase() ),
+        filter( (letter: string) => this.wordService.isValidLetter(letter)),
+        distinct()
+      );
+
+    // Create a new observable of word letters misses.
+    const wordMisses$ = uniqueLetters$
+      .pipe(
+        filter( (letter) => !this.isLetterIncluded(letter)),
+        mapTo(1),
+        scan( (missesCount, letter) => ++missesCount, 0 )
+      );
+
+    // Based on uniqueLetters stream, create an observable of matching letters.
+    const wordMatches$ = uniqueLetters$
+      .pipe(
+        filter( (letter) => this.isLetterIncluded(letter))
+      );
+
+    // Subscribe to observables.
+    uniqueLetters$
+      .subscribe( (key: string) => this.usedLetters.push(key));
+
+    wordMisses$
+      .subscribe(
+        missesCount => this.letterMisses = missesCount
+      );
+
+    wordMatches$
+      .subscribe(
+        letter => {
+          this.word.letters = this.word.letters
+            .map(
+              wordLetter => {
+                if (wordLetter.value === letter) {
+                  const updatedLetter = Object.assign(wordLetter);
+
+                  updatedLetter.state = LetterState.Discovered;
+
+                  return updatedLetter;
+                }
+
+                return wordLetter;
+              });
+        }
+      );
+
+    minuteSeconds$
+      .subscribe(
+        second => this.currentSeconds = second,
+        () => {},
+        () => {
+          this.word.letters = this.word.letters
+            .map(
+              wordLetter => {
+                if (wordLetter.state === LetterState.Undiscovered) {
+                  const updatedLetter = Object.assign(wordLetter);
+
+                  updatedLetter.state = LetterState.Lost;
+
+                  return updatedLetter;
+                }
+                return wordLetter;
+              });
+        }
+      );
    }
 
    ngOnDestroy() {
     clearInterval(this.intervalId);
-    this.document.removeEventListener('keypress', (event: KeyboardEvent) => this.usedLetters.push(event.key));
    }
 
   /** –––
@@ -80,5 +158,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   showBodyPart(partIndex: number) {
     return this.letterMisses < partIndex;
+  }
+
+  isLetterIncluded(letter: string) {
+    return this.word.letters.some( (wordLetter: Letter) => wordLetter.value === letter );
   }
 }

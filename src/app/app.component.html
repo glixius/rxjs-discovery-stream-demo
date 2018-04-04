@@ -33,7 +33,7 @@
   </div>
   <div class="timer">
     <div>
-      <p>{{currentSeconds}}</p>
+      <p [class.limited-time]="currentSeconds > 45">{{currentSeconds}}</p>
       <span>seconds</span>
     </div>
   </div>
