@@ -1,6 +1,9 @@
 <div class="hangman-board">
   <div class="word-section">
-    <p *ngFor="let letter of word?.letters">{{ showLetter(letter.state) && letter.value || '' }}</p>
+    <p
+      [class.discovered]="isDiscoveredLetter(letter.state)"
+      [class.lost]="isLostLetter(letter.state)"
+      *ngFor="let letter of word?.letters">{{ showLetter(letter.state) && letter.value || '' }}</p>
   </div>
   <div class="record-section">
     <header>Used letters</header>

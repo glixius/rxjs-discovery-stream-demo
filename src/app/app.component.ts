@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-03 21:50:47
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 06:50:55
+ * @Last Modified time: 2018-04-04 12:48:54
  */
 
  /* ––
@@ -67,7 +67,15 @@ export class AppComponent implements OnInit, OnDestroy {
    *  –– Public methods
    */
   showLetter(letterState: LetterState) {
-    return letterState === LetterState.Undiscovered;
+    return letterState !== LetterState.Undiscovered;
+  }
+
+  isDiscoveredLetter(letterState: LetterState) {
+    return letterState === LetterState.Discovered;
+  }
+
+  isLostLetter(letterState: LetterState) {
+    return letterState === LetterState.Lost;
   }
 
   showBodyPart(partIndex: number) {
