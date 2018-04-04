@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-03 21:50:47
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 13:22:47
+ * @Last Modified time: 2018-04-04 15:27:49
  */
 
  /* ––
@@ -16,7 +16,9 @@ import { DOCUMENT } from '@angular/common';
 // Third party libraries
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { interval } from 'rxjs/observable/interval';
-import { map, filter, scan, mapTo, share, take, skip, takeLast, distinct, takeUntil } from 'rxjs/operators';
+import {
+  map, filter, scan, mapTo, share, take,
+  skip, takeLast, distinct, takeWhile, takeUntil } from 'rxjs/operators';
 
 // App Imports
 import { LetterState } from './enums/letter-state.enum';
@@ -60,7 +62,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const minuteSeconds$ = interval(1000)
       .pipe(
-        take(61)
+        take(61),
+        takeWhile( () => !this.word.resolved )
       );
     const minuteReached$ = minuteSeconds$
       .pipe(takeLast(1));
@@ -113,6 +116,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
                 return wordLetter;
               });
+
+              this.word.resolved = this.word.letters.every( wordLetter => wordLetter.state === LetterState.Discovered);
         }
       );
 
