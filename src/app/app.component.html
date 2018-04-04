@@ -1,20 +1,38 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="hangman-board">
+  <div class="word-section">
+    <p *ngFor="let letter of word?.letters">{{ showLetter(letter.state) && letter.value || '' }}</p>
+  </div>
+  <div class="record-section">
+    <header>Used letters</header>
+    <div class="letter-history">
+      <p *ngFor="let usedLetter of usedLetters">{{usedLetter}}</p>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<aside class="hangman-results">
+  <div class="hangman-image">
+      <svg id="hangman-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 400 500" stroke="#000000" fill="none">
+        <polyline stroke-width="10" stroke-miterlimit="10" points="253.996,142.899 253.996,59.666
+                                                                   115.663,59.666 115.663,434.999 "/>
+        <line stroke-width="10" stroke-miterlimit="10" x1="392.33" y1="434.999" x2="8.33" y2="434.999"/>
+        <g id="added-parts">
+            <circle [class.hidden]="showBodyPart(1)" stroke-width="10" stroke-miterlimit="10" cx="254.404" cy="174.26" r="29.412"/>
+            <line [class.hidden]="showBodyPart(2)" stroke-width="10" stroke-miterlimit="10" x1="254.404" y1="203.672" x2="254.404" y2="314.056"/>
+            <line [class.hidden]="showBodyPart(3)" stroke-width="10" stroke-miterlimit="10" x1="255.339" y1="311.094" x2="185.875" y2="406.468"/>
+            <line [class.hidden]="showBodyPart(4)" stroke-width="10" stroke-miterlimit="10" x1="323.46" y1="406.468" x2="253.996" y2="311.094"/>
+            <line [class.hidden]="showBodyPart(5)" stroke-width="10" stroke-miterlimit="10" x1="254.404" y1="229.409" x2="164.11" y2="256.834"/>
+            <line [class.hidden]="showBodyPart(6)" stroke-width="10" stroke-miterlimit="10" x1="254.404" y1="229.409" x2="344.699" y2="256.834"/>
+            <circle [class.hidden]="showBodyPart(7)" fill="#000000" cx="243.663" cy="169.333" r="3.667"/>
+            <circle [class.hidden]="showBodyPart(8)" fill="#000000" cx="265.663" cy="169.333" r="3.667"/>
+            <path [class.hidden]="showBodyPart(9)" stroke-width="4" stroke-miterlimit="10" d="M245.571,190.082c0-4.879,3.955-8.833,8.833-8.833 c4.879,0,8.833,3.955,8.833,8.833"/>
+        </g>
+      </svg>
+  </div>
+  <div class="timer">
+    <div>
+      <p>{{currentSeconds}}</p>
+      <span>seconds</span>
+    </div>
+  </div>
+</aside>
 
