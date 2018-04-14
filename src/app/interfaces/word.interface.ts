@@ -2,7 +2,7 @@
  * @Author: Gilberto López
  * @Date: 2018-04-04 05:10:44
  * @Last Modified by: Gilberto López
- * @Last Modified time: 2018-04-04 13:44:13
+ * @Last Modified time: 2018-04-13 21:30:17
  */
 
 /* ––
@@ -17,5 +17,5 @@ import { Letter } from './letter.interface';
 
  export interface Word {
    letters: Letter[];
-   resolved: boolean;
+   finished: boolean;
  }
